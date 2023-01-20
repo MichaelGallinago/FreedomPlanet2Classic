@@ -3,7 +3,7 @@ using HarmonyLib;
 
 namespace FP2Rebalance
 {
-    [BepInPlugin("com.micg.plugins.fp2.classic", "FP2Classic", "1.0.0")]
+    [BepInPlugin("com.micg.plugins.fp2.classic", "FP2Classic", "1.0.1")]
     [BepInProcess("FP2.exe")]
     public class Plugin : BaseUnityPlugin
     {
@@ -22,12 +22,20 @@ namespace FP2Rebalance
 
             static void Prefix()
             {
-                FPSaveManager.badges[0] = 1;
+                ResetBadgeValue(1);
             }
 
             static void Postfix()
             {
-                FPSaveManager.badges[0] = savedValue;
+                ResetBadgeValue(savedValue);
+            }
+
+            static void ResetBadgeValue(byte value)
+            {
+                if (FPSaveManager.badges[63] == 0 && !FPSaveManager.demoMode)
+                {
+                    FPSaveManager.badges[0] = value;
+                }
             }
         }
     }
